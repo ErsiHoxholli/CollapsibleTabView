@@ -14,6 +14,7 @@ const TabBarHeight = 48;
 const HeaderHeight = 35;
 const tab1ItemSize = (Dimensions.get("window").width - 30) / 2;
 const tab2ItemSize = (Dimensions.get("window").width - 40) / 3;
+const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 const TabScene = ({
     numCols,
     data,
@@ -67,7 +68,7 @@ const TabScene = ({
     );
 };
 
-const CollapsibleTabView = () => {
+const CollapsibleTabView = ({ navigation }) => {
     const [tabIndex, setIndex] = useState(0);
     const [routes] = useState([
         { key: "tab1", title: "Accounts" },
@@ -168,8 +169,46 @@ const CollapsibleTabView = () => {
         );
     };
 
+    const BCK = () => {
+        var y = scrollY.interpolate({
+            inputRange: [0, HeaderHeight],
+            outputRange: [0, -HeaderHeight],
+            extrapolate: "clamp",
+        });
+
+        var ZY = -1 * JSON.stringify(scrollY) - 0;
+
+        return (
+            <AnimatedBlurView
+                intensity={30}
+                tint="light"
+                style={{
+                    position: "absolute",
+                    width: "100%",
+                    zIndex: 1,
+                    transform: [{ translateY: y }],
+                }}
+            >
+                <Animated.View
+                    style={{
+                        height: 150,
+                    }}
+                ></Animated.View>
+            </AnimatedBlurView>
+        );
+    };
+
+    useEffect(() => {
+        navigation.setOptions({
+            renderSearchBar: renderHeader,
+            headerBackground: () => {
+                return <BCK></BCK>;
+            },
+        });
+    });
     const rednerTab1Item = ({ item, index }) => {
         return (
+            // <BlurView intensity={50} tint="dark">
             <View
                 style={{
                     borderRadius: 16,
@@ -183,11 +222,13 @@ const CollapsibleTabView = () => {
             >
                 <Text>{index}</Text>
             </View>
+            // </BlurView>
         );
     };
 
     const rednerTab2Item = ({ item, index }) => {
         return (
+            // <BlurView intensity={50} tint="dark">
             <View
                 style={{
                     marginLeft: index % 3 === 0 ? 0 : 10,
@@ -201,14 +242,17 @@ const CollapsibleTabView = () => {
             >
                 <Text>{index}</Text>
             </View>
+            // </BlurView>
         );
     };
 
     const renderLabel = ({ route, focused }) => {
         return (
+            // <BlurView intensity={50} tint="dark">
             <Text style={[styles.label, { opacity: focused ? 1 : 0.5 }]}>
                 {route.title}
             </Text>
+            // </BlurView>
         );
     };
 
@@ -232,6 +276,7 @@ const CollapsibleTabView = () => {
                 return null;
         }
         return (
+            // <BlurView intensity={60} tint="dark">
             <TabScene
                 numCols={numCols}
                 data={data}
@@ -254,6 +299,7 @@ const CollapsibleTabView = () => {
                     }
                 }}
             />
+            // </BlurView>
         );
     };
 
@@ -264,32 +310,41 @@ const CollapsibleTabView = () => {
             extrapolateRight: "clamp",
         });
         return (
-            <Animated.View
-                style={{
-                    top: 0,
-                    zIndex: 1,
-                    position: "absolute",
-                    transform: [{ translateY: y }],
-                    width: "100%",
-                }}
-            >
-                <TabBar
-                    {...props}
-                    onTabPress={({ route, preventDefault }) => {
-                        if (isListGliding.current) {
-                            preventDefault();
-                        }
+            <View style={{ zIndex: 2000 }}>
+                {/* <View
+                    intensity={30}
+                    tint="light"
+                    style={{ zIndex: 2, height: 55, position:'absolute', backgroundColor:'red', top:0, left:0, width:"100%" }}
+                ></View> */}
+
+                <Animated.View
+                    style={{
+                        top: 0,
+                        zIndex: 4,
+                        position: "absolute",
+                        transform: [{ translateY: y }],
+                        width: "100%",
                     }}
-                    style={styles.tab}
-                    renderLabel={renderLabel}
-                    indicatorStyle={styles.indicator}
-                />
-            </Animated.View>
+                >
+                    <TabBar
+                        {...props}
+                        onTabPress={({ route, preventDefault }) => {
+                            if (isListGliding.current) {
+                                preventDefault();
+                            }
+                        }}
+                        style={styles.tab}
+                        renderLabel={renderLabel}
+                        indicatorStyle={styles.indicator}
+                    />
+                </Animated.View>
+            </View>
         );
     };
 
     const renderTabView = () => {
         return (
+            // <BlurView intensity={60} tint="dark">
             <TabView
                 onIndexChange={(index) => setIndex(index)}
                 navigationState={{ index: tabIndex, routes }}
@@ -300,14 +355,14 @@ const CollapsibleTabView = () => {
                     width: Dimensions.get("window").width,
                 }}
             />
+            // </BlurView>
         );
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: "white" }}>
-            {renderHeader()}
+        <Animated.View style={{ flex: 1, backgroundColor: "white" }}>
             {renderTabView()}
-        </View>
+        </Animated.View>
     );
 };
 
@@ -323,7 +378,7 @@ const styles = StyleSheet.create({
         borderRadius: 500,
     },
     label: { fontSize: 16, color: "#222" },
-    tab: { elevation: 0, shadowOpacity: 0, backgroundColor: "#FFF" },
+    tab: { elevation: 0, shadowOpacity: 0, backgroundColor: "transparent" },
     indicator: { backgroundColor: "#222" },
 });
 
