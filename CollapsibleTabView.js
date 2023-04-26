@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-    SafeAreaView,
     StyleSheet,
     View,
     Text,
@@ -8,13 +7,13 @@ import {
     Animated,
     TextInput,
 } from "react-native";
+import { BlurView } from "expo-blur";
 import { TabView, TabBar } from "react-native-tab-view";
 
 const TabBarHeight = 48;
 const HeaderHeight = 35;
 const tab1ItemSize = (Dimensions.get("window").width - 30) / 2;
 const tab2ItemSize = (Dimensions.get("window").width - 40) / 3;
-
 const TabScene = ({
     numCols,
     data,
@@ -27,18 +26,28 @@ const TabScene = ({
 }) => {
     const windowHeight = Dimensions.get("window").height;
 
+    const onScroll = (e) => {
+        const animatedScroll = Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            {
+                useNativeDriver: true,
+            }
+        );
+        var offsetY = e.nativeEvent.contentOffset.y;
+        if (offsetY < 0) {
+            offsetY = 0;
+        }
+        scrollY.setValue(offsetY);
+        console.debug(offsetY);
+    };
+
     return (
         <Animated.FlatList
             scrollToOverflowEnabled={true}
             numColumns={numCols}
             ref={onGetRef}
             scrollEventThrottle={16}
-            onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-                {
-                    useNativeDriver: true,
-                }
-            )}
+            onScroll={onScroll}
             onMomentumScrollBegin={onMomentumScrollBegin}
             onScrollEndDrag={onScrollEndDrag}
             onMomentumScrollEnd={onMomentumScrollEnd}
@@ -128,13 +137,33 @@ const CollapsibleTabView = () => {
         const y = scrollY.interpolate({
             inputRange: [0, HeaderHeight],
             outputRange: [0, -HeaderHeight],
-            extrapolateRight: "clamp",
         });
+
+        const scaleY = scrollY.interpolate({
+            inputRange: [0, HeaderHeight],
+            outputRange: [1, 0],
+        });
+
+        const opacity = scrollY.interpolate({
+            inputRange: [0, HeaderHeight - 10],
+            outputRange: [1, 0],
+        });
+
         return (
             <Animated.View
-                style={[styles.header, { transform: [{ translateY: y }] }]}
+                style={[
+                    styles.header,
+                    {
+                        transform: [{ scaleY: scaleY }, { translateY: y }],
+                        opacity: opacity,
+                        zIndex: 999,
+                    },
+                ]}
             >
-                <TextInput placeholder="Search"></TextInput>
+                <TextInput
+                    placeholder="Search"
+                    style={{ width: "100%", paddingLeft: 15 }}
+                />
             </Animated.View>
         );
     };
@@ -276,8 +305,8 @@ const CollapsibleTabView = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
-            {renderTabView()}
             {renderHeader()}
+            {renderTabView()}
         </View>
     );
 };
@@ -288,11 +317,10 @@ const styles = StyleSheet.create({
         height: HeaderHeight,
         width: "90%",
         backgroundColor: "#E6E6E6",
-        alignItems: "center",
         justifyContent: "center",
         position: "absolute",
         marginLeft: 22,
-        borderRadius: 20,
+        borderRadius: 500,
     },
     label: { fontSize: 16, color: "#222" },
     tab: { elevation: 0, shadowOpacity: 0, backgroundColor: "#FFF" },

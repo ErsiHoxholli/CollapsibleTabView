@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CollapsibleTabView from "./CollapsibleTabView";
 import { Ionicons } from "@expo/vector-icons";
-
+import { BlurView } from "expo-blur";
 const Stack = createNativeStackNavigator();
 function App() {
     return (
@@ -47,13 +47,8 @@ function App() {
                                 name="md-notifications"
                                 size={28}
                                 color="black"
-                                style={
-                                    {
-                                        // marginBottom: 10,
-                                    }
-                                }
                             />
-                        )
+                        ),
                     })}
                 />
             </Stack.Navigator>
