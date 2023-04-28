@@ -1,9 +1,7 @@
 import * as React from "react";
-import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CollapsibleTabView from "./CollapsibleTabView";
-import { SafeAreaView } from "react-native-safe-area-context";
 // /import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Stack = createNativeStackNavigator();
@@ -116,9 +114,7 @@ function App() {
                         //         </View>
                         //     );
                         // },
-                        headerStyle: {
-                            height: 50,
-                        },
+
                         contentStyle: {
                             backgroundColor: "transparent",
                         },

@@ -20,7 +20,7 @@ const TabScene = ({ numCols, data, renderItem, onGetRef, onScroll, onScrollEndDr
 	const headerHeight = useHeaderHeight();
 
 	return (
-		<ScrollView ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight }}>
+		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight+ 10 }}>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
@@ -185,7 +185,21 @@ const CollapsibleTabView = ({ navigation }) => {
 	//     syncScrollOffset();
 	// };
 
-	const onScroll = (e) => {
+	const onScroll = Animated.event(
+		// scrollX = e.nativeEvent.contentOffset.x
+		[
+			{
+				nativeEvent: {
+					contentOffset: {
+						y: scrollY
+					}
+				}
+			}
+		]
+	);
+
+	const onScroll2 = (e) => {
+
 		var offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY < 0) {
 			offsetY = 0;
@@ -237,7 +251,7 @@ const CollapsibleTabView = ({ navigation }) => {
 					position: 'absolute',
 					width: '100%',
 					top: 0,
-					height: SearchHeight + TabBarHeight + headerHeight + 20,
+					height: SearchHeight + TabBarHeight + headerHeight + 10,
 					transform: [{ translateY: y }]
 				}}></AnimatedBlurView>
 		);
@@ -380,7 +394,7 @@ const CollapsibleTabView = ({ navigation }) => {
 	};
 
 	return (
-		<Animated.View style={{ flex: 1, backgroundColor: 'white' }}>
+		<Animated.View style={{ flex: 1, backgroundColor: 'white', overflow: 'hidden' }}>
 			{renderHeader()}
 			{renderTabView()}
 		</Animated.View>
