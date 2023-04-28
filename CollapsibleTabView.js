@@ -124,32 +124,26 @@ const CollapsibleTabView = ({ navigation }) => {
     const onMomentumScrollBegin = () => {
         isListGliding.current = true;
     };
-
     const onMomentumScrollEnd = () => {
         isListGliding.current = false;
         syncScrollOffset();
     };
-
     const onScrollEndDrag = () => {
         syncScrollOffset();
     };
-
     const renderHeader = () => {
         const y = scrollY.interpolate({
             inputRange: [0, HeaderHeight],
             outputRange: [0, -HeaderHeight],
         });
-
         const scaleY = scrollY.interpolate({
             inputRange: [0, HeaderHeight],
             outputRange: [1, 0],
         });
-
         const opacity = scrollY.interpolate({
             inputRange: [0, HeaderHeight - 10],
             outputRange: [1, 0],
         });
-
         return (
             <Animated.View
                 style={[
@@ -208,7 +202,6 @@ const CollapsibleTabView = ({ navigation }) => {
     });
     const rednerTab1Item = ({ item, index }) => {
         return (
-            // <BlurView intensity={50} tint="dark">
             <View
                 style={{
                     borderRadius: 16,
@@ -222,13 +215,11 @@ const CollapsibleTabView = ({ navigation }) => {
             >
                 <Text>{index}</Text>
             </View>
-            // </BlurView>
         );
     };
 
     const rednerTab2Item = ({ item, index }) => {
         return (
-            // <BlurView intensity={50} tint="dark">
             <View
                 style={{
                     marginLeft: index % 3 === 0 ? 0 : 10,
@@ -242,17 +233,14 @@ const CollapsibleTabView = ({ navigation }) => {
             >
                 <Text>{index}</Text>
             </View>
-            // </BlurView>
         );
     };
 
     const renderLabel = ({ route, focused }) => {
         return (
-            // <BlurView intensity={50} tint="dark">
             <Text style={[styles.label, { opacity: focused ? 1 : 0.5 }]}>
                 {route.title}
             </Text>
-            // </BlurView>
         );
     };
 
@@ -276,7 +264,6 @@ const CollapsibleTabView = ({ navigation }) => {
                 return null;
         }
         return (
-            // <BlurView intensity={60} tint="dark">
             <TabScene
                 numCols={numCols}
                 data={data}
@@ -299,7 +286,6 @@ const CollapsibleTabView = ({ navigation }) => {
                     }
                 }}
             />
-            // </BlurView>
         );
     };
 
@@ -311,12 +297,6 @@ const CollapsibleTabView = ({ navigation }) => {
         });
         return (
             <View style={{ zIndex: 2000 }}>
-                {/* <View
-                    intensity={30}
-                    tint="light"
-                    style={{ zIndex: 2, height: 55, position:'absolute', backgroundColor:'red', top:0, left:0, width:"100%" }}
-                ></View> */}
-
                 <Animated.View
                     style={{
                         top: 0,
@@ -344,7 +324,6 @@ const CollapsibleTabView = ({ navigation }) => {
 
     const renderTabView = () => {
         return (
-            // <BlurView intensity={60} tint="dark">
             <TabView
                 onIndexChange={(index) => setIndex(index)}
                 navigationState={{ index: tabIndex, routes }}
@@ -355,7 +334,6 @@ const CollapsibleTabView = ({ navigation }) => {
                     width: Dimensions.get("window").width,
                 }}
             />
-            // </BlurView>
         );
     };
 
