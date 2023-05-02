@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { TabView, TabBar } from './fin-one-tab-view/src';
 import {} from 'react-native-safe-area-context';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -15,12 +15,12 @@ const tab1ItemSize = (Dimensions.get('window').width - 30) / 2;
 const tab2ItemSize = (Dimensions.get('window').width - 40) / 3;
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
-const TabScene = ({ numCols, data, renderItem, onGetRef, onScroll, onScrollEndDrag, onMomentumScrollEnd, onMomentumScrollBegin }) => {
+const TabScene = ({ onGetRef, onScroll }) => {
 	const insets = useSafeAreaInsets();
 	const headerHeight = useHeaderHeight();
 
 	return (
-		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight+ 10 }}>
+		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
@@ -183,30 +183,27 @@ const CollapsibleTabView = ({ navigation }) => {
 	// };
 	// const onScrollEndDrag = () => {
 	//     syncScrollOffset();
-	// };
+	// }
 
-	const onScroll = Animated.event(
-		// scrollX = e.nativeEvent.contentOffset.x
-		[
-			{
-				nativeEvent: {
-					contentOffset: {
-						y: scrollY
-					}
+	const onScroll = Animated.event([
+		{
+			nativeEvent: {
+				contentOffset: {
+					y: scrollY
 				}
 			}
-		]
-	);
-
-	const onScroll2 = (e) => {
-
-		var offsetY = e.nativeEvent.contentOffset.y;
-		if (offsetY < 0) {
-			offsetY = 0;
 		}
-		scrollY.setValue(offsetY);
-		console.debug(offsetY);
-	};
+	]);
+
+	// const onScroll2 = (e) => {
+
+	// 	var offsetY = e.nativeEvent.contentOffset.y;
+	// 	if (offsetY < 0) {
+	// 		offsetY = 0;
+	// 	}
+	// 	scrollY.setValue(offsetY);
+	// 	console.debug(offsetY);
+	// };
 
 	const renderHeader = () => {
 		const y = scrollY.interpolate({
