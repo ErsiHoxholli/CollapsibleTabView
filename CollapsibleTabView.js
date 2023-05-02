@@ -182,9 +182,10 @@ const CollapsibleTabView = ({ navigation }) => {
 						zIndex: 999
 					}
 				]}>
-				<TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}>
+				{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
+				<TouchableOpacity>
 					<SharedElement id={SEARCH_ELEMENT_ID}>
-						<Text>aaaaaaaaaaaaa</Text>
+						<TextInput onFocus={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })} placeholder="Search" style={{ width: '100%', paddingLeft: 15 }}></TextInput>
 					</SharedElement>
 				</TouchableOpacity>
 			</Animated.View>

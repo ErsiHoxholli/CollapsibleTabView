@@ -20,7 +20,24 @@ function SharedElementNavigator() {
 				name="SearchScreen"
 				component={SearchScreen}
 				options={() => ({
-					headerTitle: 'SearchScreen'
+					gestureEnabled: false,
+					transitionSpec: {
+						open: {
+							animation: 'timing',
+							config: { duration: 300 }
+						},
+						close: {
+							animation: 'timing',
+							config: { duration: 300 }
+						}
+					},
+					cardStyleInterpolator: ({ current: { progress } }) => {
+						return {
+							cardStyle: {
+								opacity: progress
+							}
+						};
+					}
 				})}
 			/>
 		</Stack.Navigator>
