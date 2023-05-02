@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { TabView, TabBar } from './fin-one-tab-view/src';
 import {} from 'react-native-safe-area-context';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const TabBarHeight = 48;
 const SearchHeight = 35;
@@ -20,7 +21,7 @@ const TabScene = ({ numCols, data, renderItem, onGetRef, onScroll, onScrollEndDr
 	const headerHeight = useHeaderHeight();
 
 	return (
-		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight+ 10 }}>
+		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
@@ -134,72 +135,17 @@ const CollapsibleTabView = ({ navigation }) => {
 		});
 	}, []);
 
-	// useEffect(() => {
-	//     scrollY.addListener(({ value }) => {
-	//         const curRoute = routes[tabIndex].key;
-	//         listOffset.current[curRoute] = value;
-	//     });
-	//     return () => {
-	//         scrollY.removeAllListeners();
-	//     };
-	// }, [routes, tabIndex]);
-
-	// const syncScrollOffset = () => {
-	//     const curRouteKey = routes[tabIndex].key;
-	//     listRefArr.current.forEach((item) => {
-	//         if (item.key !== curRouteKey) {
-	//             if (scrollY._value < HeaderHeight && scrollY._value >= 0) {
-	//                 if (item.value) {
-	//                     item.value.scrollToOffset({
-	//                         offset: scrollY._value,
-	//                         animated: false,
-	//                     });
-	//                     listOffset.current[item.key] = scrollY._value;
-	//                 }
-	//             } else if (scrollY._value >= HeaderHeight) {
-	//                 if (
-	//                     listOffset.current[item.key] < HeaderHeight ||
-	//                     listOffset.current[item.key] == null
-	//                 ) {
-	//                     if (item.value) {
-	//                         item.value.scrollToOffset({
-	//                             offset: HeaderHeight,
-	//                             animated: false,
-	//                         });
-	//                         listOffset.current[item.key] = HeaderHeight;
-	//                     }
-	//                 }
-	//             }
-	//         }
-	//     });
-	// };
-
-	// const onMomentumScrollBegin = () => {
-	//     isListGliding.current = true;
-	// };
-	// const onMomentumScrollEnd = () => {
-	//     isListGliding.current = false;
-	//     syncScrollOffset();
-	// };
-	// const onScrollEndDrag = () => {
-	//     syncScrollOffset();
-	// };
-
-	const onScroll = Animated.event(
-		// scrollX = e.nativeEvent.contentOffset.x
-		[
-			{
-				nativeEvent: {
-					contentOffset: {
-						y: scrollY
-					}
+	const onScroll = Animated.event([
+		{
+			nativeEvent: {
+				contentOffset: {
+					y: scrollY
 				}
 			}
-		]
-	);
+		}
+	]);
 
 	const onScroll2 = (e) => {
-
 		var offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY < 0) {
 			offsetY = 0;
@@ -221,7 +167,9 @@ const CollapsibleTabView = ({ navigation }) => {
 			inputRange: [0, SearchHeight - 10],
 			outputRange: [1, 0]
 		});
+
 		return (
+
 			<Animated.View
 				style={[
 					styles.header,
@@ -232,7 +180,11 @@ const CollapsibleTabView = ({ navigation }) => {
 						zIndex: 999
 					}
 				]}>
-				<TextInput placeholder="Search" style={{ width: '100%', paddingLeft: 15 }} />
+				<TouchableOpacity onPress={() => navigation.push('SearchScreen')}>
+					<SharedElement id={`item.0.photo`}>
+						<TextInput placeholder="Search" style={{ width: '100%', paddingLeft: 15 }}></TextInput>
+					</SharedElement>
+				</TouchableOpacity>
 			</Animated.View>
 		);
 	};
@@ -257,11 +209,6 @@ const CollapsibleTabView = ({ navigation }) => {
 		);
 	};
 
-	// useEffect(() => {
-	//     navigation.setOptions({
-	//         renderSearchBar: renderHeader,
-	//     });
-	// });
 	const rednerTab1Item = ({ item, index }) => {
 		return (
 			<View
