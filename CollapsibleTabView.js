@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
 import { SharedElement } from 'react-navigation-shared-element';
+import SearchScreen from './SearchScreen';
 
 const TabBarHeight = 48;
 const SearchHeight = 35;
@@ -115,8 +116,9 @@ const CollapsibleTabView = ({ navigation }) => {
 	const headerHeight = useHeaderHeight();
 
 	const AnimateIonIcons = Animated.createAnimatedComponent(Ionicons);
+
 	useEffect(() => {
-		navigation.setOptions({
+		navigation.getParent().setOptions({
 			headerLeft: () => (
 				<AnimateIonIcons
 					name="person-circle-outline"
@@ -155,6 +157,7 @@ const CollapsibleTabView = ({ navigation }) => {
 	};
 
 	const renderHeader = () => {
+		const SEARCH_ELEMENT_ID = 'searchElementId';
 		const y = scrollY.interpolate({
 			inputRange: [0, SearchHeight],
 			outputRange: [0, -SearchHeight]
@@ -169,7 +172,6 @@ const CollapsibleTabView = ({ navigation }) => {
 		});
 
 		return (
-
 			<Animated.View
 				style={[
 					styles.header,
@@ -180,15 +182,14 @@ const CollapsibleTabView = ({ navigation }) => {
 						zIndex: 999
 					}
 				]}>
-				<TouchableOpacity onPress={() => navigation.push('SearchScreen')}>
-					<SharedElement id={`item.0.photo`}>
-						<TextInput placeholder="Search" style={{ width: '100%', paddingLeft: 15 }}></TextInput>
+				<TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}>
+					<SharedElement id={SEARCH_ELEMENT_ID}>
+						<Text>aaaaaaaaaaaaa</Text>
 					</SharedElement>
 				</TouchableOpacity>
 			</Animated.View>
 		);
 	};
-
 	const BCKTabs = () => {
 		var y = scrollY.interpolate({
 			inputRange: [0, SearchHeight],
@@ -272,9 +273,6 @@ const CollapsibleTabView = ({ navigation }) => {
 				data={data}
 				renderItem={renderItem}
 				onScroll={onScroll}
-				// onMomentumScrollBegin={onMomentumScrollBegin}
-				// onScrollEndDrag={onScrollEndDrag}
-				// onMomentumScrollEnd={onMomentumScrollEnd}
 				onGetRef={(ref) => {
 					if (ref) {
 						const found = listRefArr.current.find((e) => e.key === route.key);

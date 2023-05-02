@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
-import { LayoutAnimation } from 'react-native';
-import { Text } from 'react-native';
+import * as React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { SharedElement } from 'react-navigation-shared-element';
 
-const SearchScreen = () => {
-	// const { searchInputRef } = route.params;
-
-	useEffect(() => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-	}, []);
-
+const SearchScreen = ({ navigation, route }) => {
+	const SEARCH_ELEMENT_ID = 'searchElementId';
 	return (
-		<SharedElement id={`item.0.photo`}>
-			<Text>test</Text>
-		</SharedElement>
+		<View style={{ paddingTop: 100 }}>
+			<TouchableOpacity onPress={() => navigation.goBack('CollapsibleTabView', { sharedElementId: SEARCH_ELEMENT_ID })}>
+				<SharedElement id={SEARCH_ELEMENT_ID}>
+					<Text>Test Shared Element Transition</Text>
+				</SharedElement>
+			</TouchableOpacity>
+		</View>
 	);
 };
 
+SearchScreen.sharedElements = (route, otherRoute, showing) => {
+	return [route.params.sharedElementId];
+};
 export default SearchScreen;
