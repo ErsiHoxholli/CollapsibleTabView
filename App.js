@@ -5,6 +5,7 @@ import CollapsibleTabView from './CollapsibleTabView';
 import SearchScreen from './SearchScreen';
 import SharedElementNavigator from './SharedElementNavigator';
 
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
 							backgroundColor: 'transparent'
 						},
 						headerTransparent: true,
-						headerTitle: ''
+						headerTitle: '',
 					})}
 				/>
 				{/* <Stack.Screen

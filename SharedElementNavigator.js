@@ -2,6 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import CollapsibleTabView from './CollapsibleTabView';
 import SearchScreen from './SearchScreen';
+import { Platform } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
@@ -9,11 +10,27 @@ enableScreens();
 
 const Stack = createSharedElementStackNavigator();
 
-function SharedElementNavigator() {
+function SharedElementNavigator(props) {
+	if (Platform.OS == 'web') {
+		return (
+			<>
+
+				<CollapsibleTabView {...props} />;
+			</>
+		);
+	}
+
 	return (
 		<Stack.Navigator
+			//initialRouteName="SearchScreen"
 			screenOptions={{
-				headerShown: false
+				headerShown: false,
+				headerStatusBarHeight: 0,
+				headerStyle: {
+					position: 'fixed',
+					top: 0
+				},
+				headerTransparent: true
 			}}>
 			<Stack.Screen name="CollapsibleTabView" component={CollapsibleTabView} />
 			<Stack.Screen

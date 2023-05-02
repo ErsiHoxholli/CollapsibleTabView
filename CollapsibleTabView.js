@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { TabView, TabBar } from './fin-one-tab-view/src';
@@ -8,21 +8,58 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
 import { SharedElement } from 'react-navigation-shared-element';
 import SearchScreen from './SearchScreen';
+import { useFocusEffect } from '@react-navigation/native';
 
 const TabBarHeight = 48;
 const SearchHeight = 35;
-const TABS_TOP = 50;
-const SEARCH_TOP = 50;
+const TABS_TOP = 10;
+const SEARCH_TOP = 10;
+const BACKGROUND_PADDING_BOTTOM = 10;
 const tab1ItemSize = (Dimensions.get('window').width - 30) / 2;
 const tab2ItemSize = (Dimensions.get('window').width - 40) / 3;
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+const SEARCH_ELEMENT_ID = 'searchElementId';
+const CANCEL_ELEMENT_ID = 'cancelElementId';
 
 const TabScene = ({ onGetRef, onScroll }) => {
 	const insets = useSafeAreaInsets();
 	const headerHeight = useHeaderHeight();
 
+	const scrollY = useRef(new Animated.Value(0)).current;
+	const topY = scrollY.interpolate({
+		inputRange: [0, SearchHeight],
+		outputRange: [SearchHeight, 0],
+		extrapolate: 'clamp'
+	});
+
 	return (
-		<ScrollView scrollEventThrottle={16} ref={onGetRef} onScroll={onScroll} contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}>
+		<Animated.ScrollView
+			style={{ top: headerHeight + TabBarHeight + 10, transform: [{ translateY: topY }] }}
+            contentInset={topY}
+			decelerationRate="normal"
+			//snapToOffsets={[0, SearchHeight]}
+			snapToEnd={false}
+			scrollEventThrottle={16}
+			ref={onGetRef}
+			onScroll={(e) => {
+				Animated.event(
+					[
+						{
+							nativeEvent: {
+								contentOffset: {
+									y: scrollY
+								}
+							}
+						}
+					],
+					{
+						useNativeDriver: false
+					}
+				);
+				onScroll(e);
+			}}
+			//contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
+		>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaa</Text>
@@ -94,7 +131,7 @@ const TabScene = ({ onGetRef, onScroll }) => {
 			<Text>aaaaaa</Text>
 			<Text>aaaaaa</Text>
 			<Text>aaaaaa</Text>
-		</ScrollView>
+		</Animated.ScrollView>
 	);
 };
 
@@ -107,18 +144,88 @@ const CollapsibleTabView = ({ navigation }) => {
 	const [tab1Data] = useState(Array(40).fill(0));
 	const [tab2Data] = useState(Array(30).fill(0));
 	const scrollY = useRef(new Animated.Value(0)).current;
+	const contentY = useRef(new Animated.Value(0)).current;
+
 	const topHeaderIcons = useRef(new Animated.Value(0)).current;
 	let listRefArr = useRef([]);
 	let listOffset = useRef({});
 	let isListGliding = useRef(false);
 
+	const nav = navigation.getParent() || navigation;
+
 	const insets = useSafeAreaInsets();
 	const headerHeight = useHeaderHeight();
+	const backGroundBlurHeightAnimated = useRef(new Animated.Value(SearchHeight + TabBarHeight + headerHeight + BACKGROUND_PADDING_BOTTOM)).current;
+	const SEARCH_TOPAnimated = useRef(new Animated.Value(headerHeight + SEARCH_TOP)).current;
+	const TABS_TOPAnimated = useRef(new Animated.Value(headerHeight + SearchHeight + TABS_TOP)).current;
 
 	const AnimateIonIcons = Animated.createAnimatedComponent(Ionicons);
 
+	const setContentsHeaderTop = useCallback(
+		function (headerHeight) {
+			backGroundBlurHeightAnimated.setValue(SearchHeight + TabBarHeight + headerHeight + BACKGROUND_PADDING_BOTTOM);
+			SEARCH_TOPAnimated.setValue(SEARCH_TOP + headerHeight);
+			TABS_TOPAnimated.setValue(TABS_TOP + SearchHeight + headerHeight);
+		},
+		[navigation, SEARCH_TOPAnimated, TABS_TOPAnimated, contentY]
+	);
+
+	const onHeaderShow = useCallback(
+		function () {
+			nav.setOptions({
+				headerShown: true
+			});
+			// contentY.setValue(insets.top - headerHeight);
+			// Animated.timing(contentY, {
+			// 	duration: 200,
+			// 	toValue: 0,
+			// 	useNativeDriver: true
+			// }).start();
+			console.debug('on header show ', headerHeight);
+
+			contentY.setValue(0);
+			setContentsHeaderTop(headerHeight);
+		},
+		[navigation, SEARCH_TOPAnimated, TABS_TOPAnimated, contentY]
+	);
+
+	const onHeaderRemove = useCallback(
+		function () {
+			console.debug('on header remove ', headerHeight);
+			contentY.setValue(headerHeight);
+			setContentsHeaderTop(0);
+			// Animated.timing(contentY, {
+			// 	duration: 200,
+			// 	toValue: insets.top,
+			// 	useNativeDriver: true
+			// }).start();
+			nav.setOptions({
+				headerShown: false
+			});
+		},
+		[navigation, SEARCH_TOPAnimated, TABS_TOPAnimated, contentY]
+	);
+
+	useFocusEffect(
+		useCallback(() => {
+			//alert(1)
+			onHeaderShow();
+
+			return () => {
+				//alert(2)
+				onHeaderRemove();
+			};
+		}, [])
+	);
+
+	// useEffect(() => {
+	// 	if (headerHeight < 1) return;
+	// 	console.debug('change header height', headerHeight);
+	// 	setContentsHeaderTop(headerHeight);
+	// }, [headerHeight]);
+
 	useEffect(() => {
-		navigation.getParent().setOptions({
+		nav.setOptions({
 			headerLeft: () => (
 				<AnimateIonIcons
 					name="person-circle-outline"
@@ -137,15 +244,20 @@ const CollapsibleTabView = ({ navigation }) => {
 		});
 	}, []);
 
-	const onScroll = Animated.event([
-		{
-			nativeEvent: {
-				contentOffset: {
-					y: scrollY
+	const onScroll = Animated.event(
+		[
+			{
+				nativeEvent: {
+					contentOffset: {
+						y: scrollY
+					}
 				}
 			}
+		],
+		{
+			useNativeDriver: true
 		}
-	]);
+	);
 
 	const onScroll2 = (e) => {
 		var offsetY = e.nativeEvent.contentOffset.y;
@@ -157,18 +269,20 @@ const CollapsibleTabView = ({ navigation }) => {
 	};
 
 	const renderHeader = () => {
-		const SEARCH_ELEMENT_ID = 'searchElementId';
-		const y = scrollY.interpolate({
-			inputRange: [0, SearchHeight],
-			outputRange: [0, -SearchHeight]
-		});
+		// const y = scrollY.interpolate({
+		// 	inputRange: [0, SearchHeight],
+		// 	outputRange: [0, -SearchHeight],
+		// 	extrapolate: 'clamp'
+		// });
 		const scaleY = scrollY.interpolate({
 			inputRange: [0, SearchHeight],
-			outputRange: [1, 0]
+			outputRange: [1, 0],
+			extrapolate: 'clamp'
 		});
 		const opacity = scrollY.interpolate({
 			inputRange: [0, SearchHeight - 10],
-			outputRange: [1, 0]
+			outputRange: [1, 0],
+			extrapolate: 'clamp'
 		});
 
 		return (
@@ -176,25 +290,54 @@ const CollapsibleTabView = ({ navigation }) => {
 				style={[
 					styles.header,
 					{
-						transform: [{ scaleY: scaleY }, { translateY: y }],
-						opacity: opacity,
-						top: insets.top + SEARCH_TOP,
+						top: SEARCH_TOPAnimated,
 						zIndex: 999
 					}
 				]}>
-				{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
-				<TouchableOpacity>
-					<SharedElement id={SEARCH_ELEMENT_ID}>
-						<TextInput onFocus={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })} placeholder="Search" style={{ width: '100%', paddingLeft: 15 }}></TextInput>
-					</SharedElement>
-				</TouchableOpacity>
+				<SharedElement id={SEARCH_ELEMENT_ID} style={{ flex: 1 }}>
+					<Animated.View
+						style={[
+							styles.searchBackground,
+							{
+								transform: [{ translateY: -SearchHeight / 2 }, { scaleY: scaleY }, { translateY: SearchHeight / 2 }],
+								opacity: opacity
+							}
+						]}>
+						{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
+
+						<TextInput
+							onFocus={() => {
+								//onHeaderRemove();
+								navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
+							}}
+							onBlur={() => {
+								//onHeaderShow();
+								//navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID });
+							}}
+							placeholder="Search"
+							style={{ width: '100%', paddingLeft: 15 }}></TextInput>
+					</Animated.View>
+				</SharedElement>
+				<SharedElement id={CANCEL_ELEMENT_ID} style={{ flexBasis: 0 }}>
+					<Animated.View style={{ height: SearchHeight, width: 50, transform: [{ translateX: 50 }], overflow: 'hidden' }}>
+						<View onPress={() => navigation.navigate('CollapsibleTabView')} style={{ flex: 1, alignContent: 'center', justifyContent: 'center', flexBasis: '0%' }}>
+							<Text style={{}}> Cancel </Text>
+						</View>
+					</Animated.View>
+				</SharedElement>
 			</Animated.View>
 		);
 	};
 	const BCKTabs = () => {
 		var y = scrollY.interpolate({
-			inputRange: [0, SearchHeight],
-			outputRange: [0, -SearchHeight],
+			inputRange: [-SearchHeight, 0, SearchHeight],
+			outputRange: [SearchHeight, 0, -SearchHeight],
+			extrapolate: 'clamp'
+		});
+
+		var elevation = scrollY.interpolate({
+			inputRange: [-SearchHeight, 0, SearchHeight],
+			outputRange: [0, 0, 3],
 			extrapolate: 'clamp'
 		});
 
@@ -205,8 +348,9 @@ const CollapsibleTabView = ({ navigation }) => {
 					position: 'absolute',
 					width: '100%',
 					top: 0,
-					height: SearchHeight + TabBarHeight + headerHeight + 10,
-					transform: [{ translateY: y }]
+					height: backGroundBlurHeightAnimated,
+					transform: [{ translateY: y }],
+					elevation: elevation
 				}}></AnimatedBlurView>
 		);
 	};
@@ -273,7 +417,20 @@ const CollapsibleTabView = ({ navigation }) => {
 				numCols={numCols}
 				data={data}
 				renderItem={renderItem}
-				onScroll={onScroll}
+				onScroll={Animated.event(
+					[
+						{
+							nativeEvent: {
+								contentOffset: {
+									y: scrollY
+								}
+							}
+						}
+					],
+					{
+						useNativeDriver: false
+					}
+				)}
 				onGetRef={(ref) => {
 					if (ref) {
 						const found = listRefArr.current.find((e) => e.key === route.key);
@@ -292,17 +449,16 @@ const CollapsibleTabView = ({ navigation }) => {
 	const renderTabBar = (props) => {
 		const y = scrollY.interpolate({
 			inputRange: [0, SearchHeight],
-			outputRange: [SearchHeight, 0],
-			extrapolateRight: 'clamp'
+			outputRange: [0, -SearchHeight],
+			extrapolate: 'clamp'
 		});
 		return (
 			<Animated.View
 				style={[
 					{
-						top: insets.top + TABS_TOP,
+						top: TABS_TOPAnimated,
 						position: 'absolute',
 						transform: [{ translateY: y }],
-						width: '100%',
 						zIndex: 3,
 						height: TabBarHeight,
 						width: '100%'
@@ -340,7 +496,7 @@ const CollapsibleTabView = ({ navigation }) => {
 	};
 
 	return (
-		<Animated.View style={{ flex: 1, backgroundColor: 'white', overflow: 'hidden' }}>
+		<Animated.View style={{ flex: 1, backgroundColor: 'white', overflow: 'hidden', transform: [{ translateY: contentY }] }}>
 			{renderHeader()}
 			{renderTabView()}
 		</Animated.View>
@@ -349,17 +505,23 @@ const CollapsibleTabView = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	header: {
-		top: 0,
+		position: 'absolute',
 		height: SearchHeight,
-		width: '90%',
+		width: '100%',
+		paddingHorizontal: 20,
+		flexDirection: 'row'
+	},
+	searchBackground: {
 		backgroundColor: '#E6E6E6',
 		justifyContent: 'center',
 		position: 'absolute',
-		marginLeft: 22,
-		borderRadius: 500
+		borderRadius: 500,
+		width: '100%',
+		height: SearchHeight,
+		flex: 1
 	},
 	label: { fontSize: 16, color: '#222' },
-	tab: { elevation: 0, shadowOpacity: 0, backgroundColor: 'transparent' },
+	tab: { elevation: 0, shadowOpacity: 0, backgroundColor: 'transparent', height: TabBarHeight },
 	indicator: { backgroundColor: '#222' }
 });
 
