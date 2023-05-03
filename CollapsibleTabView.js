@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
 import { SharedElement } from 'react-navigation-shared-element';
-import SearchScreen from './SearchScreen';
 import { useFocusEffect } from '@react-navigation/native';
 
 const TabBarHeight = 48;
@@ -34,8 +33,8 @@ const TabScene = ({ onGetRef, onScroll }) => {
 
 	return (
 		<Animated.ScrollView
-			style={{ top: headerHeight + TabBarHeight + 10, transform: [{ translateY: topY }] }}
-            contentInset={topY}
+			style={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
+			// contentInset={topY}
 			decelerationRate="normal"
 			//snapToOffsets={[0, SearchHeight]}
 			snapToEnd={false}
@@ -58,79 +57,79 @@ const TabScene = ({ onGetRef, onScroll }) => {
 				);
 				onScroll(e);
 			}}
-			//contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
+			// contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
 		>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text style={{ color: 'red' }}>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
-			<Text>aaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+			<Text>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
 		</Animated.ScrollView>
 	);
 };
@@ -218,12 +217,6 @@ const CollapsibleTabView = ({ navigation }) => {
 		}, [])
 	);
 
-	// useEffect(() => {
-	// 	if (headerHeight < 1) return;
-	// 	console.debug('change header height', headerHeight);
-	// 	setContentsHeaderTop(headerHeight);
-	// }, [headerHeight]);
-
 	useEffect(() => {
 		nav.setOptions({
 			headerLeft: () => (
@@ -232,7 +225,7 @@ const CollapsibleTabView = ({ navigation }) => {
 					size={40}
 					color="black"
 					onPress={() => {
-						navigation.toggleDrawer();
+						navigation.navigate();
 					}}
 					style={{
 						marginBottom: 10,
@@ -240,7 +233,36 @@ const CollapsibleTabView = ({ navigation }) => {
 					}}
 				/>
 			),
-			headerRight: () => <AnimateIonIcons name="md-notifications" size={28} color="black" />
+			headerRight: () => (
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<AnimateIonIcons
+						name="md-stats-chart-sharp"
+						size={24}
+						color="black"
+						style={{ marginRight: 15 }}
+						onPress={() => {
+							navigation.navigate();
+						}}
+					/>
+					<AnimateIonIcons
+						name="md-star"
+						size={24}
+						color="black"
+						style={{ marginRight: 15 }}
+						onPress={() => {
+							navigation.navigate();
+						}}
+					/>
+					<AnimateIonIcons
+						name="md-notifications"
+						size={24}
+						color="black"
+						onPress={() => {
+							navigation.navigate();
+						}}
+					/>
+				</View>
+			)
 		});
 	}, []);
 
@@ -306,7 +328,7 @@ const CollapsibleTabView = ({ navigation }) => {
 						{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
 
 						<TextInput
-							onFocus={() => {
+							onFocus={(event) => {
 								//onHeaderRemove();
 								navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
 							}}
@@ -328,10 +350,11 @@ const CollapsibleTabView = ({ navigation }) => {
 			</Animated.View>
 		);
 	};
+
 	const BCKTabs = () => {
 		var y = scrollY.interpolate({
-			inputRange: [-SearchHeight, 0, SearchHeight],
-			outputRange: [SearchHeight, 0, -SearchHeight],
+			inputRange: [0, SearchHeight],
+			outputRange: [0, -SearchHeight],
 			extrapolate: 'clamp'
 		});
 
@@ -461,7 +484,8 @@ const CollapsibleTabView = ({ navigation }) => {
 						transform: [{ translateY: y }],
 						zIndex: 3,
 						height: TabBarHeight,
-						width: '100%'
+						width: '45%',
+						marginLeft: 20
 					}
 				]}>
 				<TabBar

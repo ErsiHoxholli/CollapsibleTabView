@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CollapsibleTabView from './CollapsibleTabView';
-import SearchScreen from './SearchScreen';
 import SharedElementNavigator from './SharedElementNavigator';
-
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +31,7 @@ function App() {
 							backgroundColor: 'transparent'
 						},
 						headerTransparent: true,
-						headerTitle: '',
+						headerTitle: ''
 					})}
 				/>
 				{/* <Stack.Screen
@@ -47,8 +44,8 @@ function App() {
 						headerTransparent: true,
 						headerTitle: ''
 					})}
-				/> */}
-				{/* <Stack.Screen
+				/>
+				 <Stack.Screen
 					name="SearchScreen"
 					component={SearchScreen}
 					options={() => ({
