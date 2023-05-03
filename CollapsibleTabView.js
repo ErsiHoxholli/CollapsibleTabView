@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, View, Text, Dimensions, Animated, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Animated, TextInput, Platform, TouchableWithoutFeedback } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { TabView, TabBar } from './fin-one-tab-view/src';
 import {} from 'react-native-safe-area-context';
@@ -144,7 +144,6 @@ const CollapsibleTabView = ({ navigation }) => {
 	const [tab2Data] = useState(Array(30).fill(0));
 	const scrollY = useRef(new Animated.Value(0)).current;
 	const contentY = useRef(new Animated.Value(0)).current;
-
 	const topHeaderIcons = useRef(new Animated.Value(0)).current;
 	let listRefArr = useRef([]);
 	let listOffset = useRef({});
@@ -207,11 +206,9 @@ const CollapsibleTabView = ({ navigation }) => {
 
 	useFocusEffect(
 		useCallback(() => {
-			//alert(1)
 			onHeaderShow();
 
 			return () => {
-				//alert(2)
 				onHeaderRemove();
 			};
 		}, [])
@@ -326,18 +323,18 @@ const CollapsibleTabView = ({ navigation }) => {
 							}
 						]}>
 						{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
-
-						<TextInput
-							onFocus={(event) => {
-								//onHeaderRemove();
-								navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
-							}}
-							onBlur={() => {
-								//onHeaderShow();
-								//navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID });
-							}}
-							placeholder="Search"
-							style={{ width: '100%', paddingLeft: 15 }}></TextInput>
+						<>
+							<View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: 5, padding: 10 }}>
+								<TouchableWithoutFeedback
+									onPress={() => {
+										navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
+									}}>
+									<View style={{ flex: 1 }}>
+										<Text style={{ color: '#aaa' }}>Search</Text>
+									</View>
+								</TouchableWithoutFeedback>
+							</View>
+						</>
 					</Animated.View>
 				</SharedElement>
 				<SharedElement id={CANCEL_ELEMENT_ID} style={{ flexBasis: 0 }}>
@@ -363,9 +360,10 @@ const CollapsibleTabView = ({ navigation }) => {
 			outputRange: [0, 0, 3],
 			extrapolate: 'clamp'
 		});
-
+		const backgroundColor = Platform.OS === 'android' ? 'rgb(255,255,255)' : 'transparent';
+		const BackgroundViewComponent = Platform.OS === 'android' ? Animated.View : AnimatedBlurView;
 		return (
-			<AnimatedBlurView
+			<BackgroundViewComponent
 				intensity={100}
 				style={{
 					position: 'absolute',
@@ -373,8 +371,9 @@ const CollapsibleTabView = ({ navigation }) => {
 					top: 0,
 					height: backGroundBlurHeightAnimated,
 					transform: [{ translateY: y }],
-					elevation: elevation
-				}}></AnimatedBlurView>
+					elevation: elevation,
+					backgroundColor: backgroundColor
+				}}></BackgroundViewComponent>
 		);
 	};
 
@@ -482,7 +481,7 @@ const CollapsibleTabView = ({ navigation }) => {
 						top: TABS_TOPAnimated,
 						position: 'absolute',
 						transform: [{ translateY: y }],
-						zIndex: 3,
+						zIndex: 4,
 						height: TabBarHeight,
 						width: '45%',
 						marginLeft: 20

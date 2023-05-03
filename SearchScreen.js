@@ -21,7 +21,9 @@ const SearchScreen = ({ navigation, route }) => {
 								<Ionicons name="arrow-back" size={24} color="black" style={{ paddingLeft: 10 }} />
 							</TouchableOpacity>
 						)}
+
 						<TextInput
+							// {...(Platform.OS === 'android' ? {} : { autoFocus: true })}
 							autoFocus={true}
 							onFocus={() => {
 								//onHeaderRemove();
