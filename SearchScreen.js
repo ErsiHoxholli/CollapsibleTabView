@@ -23,7 +23,6 @@ const SearchScreen = ({ navigation, route }) => {
 						)}
 
 						<TextInput
-							// {...(Platform.OS === 'android' ? {} : { autoFocus: true })}
 							autoFocus={true}
 							onFocus={() => {
 								//onHeaderRemove();

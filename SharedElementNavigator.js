@@ -37,11 +37,11 @@ function SharedElementNavigator(props) {
 					transitionSpec: {
 						open: {
 							animation: 'timing',
-							config: { duration: 300 }
+							config: { duration: 150 }
 						},
 						close: {
 							animation: 'timing',
-							config: { duration: 300 }
+							config: { duration: 150 }
 						}
 					},
 					cardStyleInterpolator: ({ current: { progress } }) => {

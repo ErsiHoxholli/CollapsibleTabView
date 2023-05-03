@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, View, Text, Dimensions, Animated, TextInput, Platform, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Animated, TouchableNativeFeedback, Platform, TouchableWithoutFeedback } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { TabView, TabBar } from './fin-one-tab-view/src';
 import {} from 'react-native-safe-area-context';
@@ -33,9 +33,9 @@ const TabScene = ({ onGetRef, onScroll }) => {
 
 	return (
 		<Animated.ScrollView
-			style={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
-			// contentInset={topY}
+			contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
 			decelerationRate="normal"
+			// contentInset={topY}
 			//snapToOffsets={[0, SearchHeight]}
 			snapToEnd={false}
 			scrollEventThrottle={16}
@@ -322,15 +322,14 @@ const CollapsibleTabView = ({ navigation }) => {
 								opacity: opacity
 							}
 						]}>
-						{/* <TouchableOpacity onPress={() => navigation.push('SearchScreen', { sharedElementId: SEARCH_ELEMENT_ID })}> */}
 						<>
-							<View style={{ flexDirection: 'row', alignItems: 'center', borderRadius: 5, padding: 10 }}>
+							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 5, padding: 10 }}>
 								<TouchableWithoutFeedback
 									onPress={() => {
 										navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
 									}}>
 									<View style={{ flex: 1 }}>
-										<Text style={{ color: '#aaa' }}>Search</Text>
+										<Text style={{ color: '#aaa', paddingLeft: 5, justifyContent: 'center', alignItems: 'center' }}>Search</Text>
 									</View>
 								</TouchableWithoutFeedback>
 							</View>
@@ -360,7 +359,6 @@ const CollapsibleTabView = ({ navigation }) => {
 			outputRange: [0, 0, 3],
 			extrapolate: 'clamp'
 		});
-		const backgroundColor = Platform.OS === 'android' ? 'rgb(255,255,255)' : 'transparent';
 		const BackgroundViewComponent = Platform.OS === 'android' ? Animated.View : AnimatedBlurView;
 		return (
 			<BackgroundViewComponent
@@ -371,8 +369,13 @@ const CollapsibleTabView = ({ navigation }) => {
 					top: 0,
 					height: backGroundBlurHeightAnimated,
 					transform: [{ translateY: y }],
-					elevation: elevation,
-					backgroundColor: backgroundColor
+					...Platform.select({
+						android: {
+							backgroundColor: 'rgb(255,255,255)',
+							zIndex: 1,
+							elevation: elevation
+						}
+					})
 				}}></BackgroundViewComponent>
 		);
 	};
@@ -475,36 +478,40 @@ const CollapsibleTabView = ({ navigation }) => {
 			extrapolate: 'clamp'
 		});
 		return (
-			<Animated.View
-				style={[
-					{
-						top: TABS_TOPAnimated,
-						position: 'absolute',
-						transform: [{ translateY: y }],
-						zIndex: 4,
-						height: TabBarHeight,
-						width: '45%',
-						marginLeft: 20
-					}
-				]}>
-				<TabBar
-					{...props}
-					onTabPress={({ route, preventDefault }) => {
-						if (isListGliding.current) {
-							preventDefault();
+			<TouchableNativeFeedback>
+				<Animated.View
+					style={[
+						{
+							top: TABS_TOPAnimated,
+							position: 'absolute',
+							transform: [{ translateY: y }],
+							zIndex: 4,
+							elevation: 5,
+							height: TabBarHeight,
+							width: '45%',
+							marginLeft: 20
 						}
-					}}
-					style={[styles.tab]}
-					renderLabel={renderLabel}
-					indicatorStyle={styles.indicator}
-				/>
-			</Animated.View>
+					]}>
+					<TabBar
+						{...props}
+						onTabPress={({ route, preventDefault }) => {
+							if (isListGliding.current) {
+								preventDefault();
+							}
+						}}
+						style={[styles.tab]}
+						renderLabel={renderLabel}
+						indicatorStyle={styles.indicator}
+					/>
+				</Animated.View>
+			</TouchableNativeFeedback>
 		);
 	};
 
 	const renderTabView = () => {
 		return (
 			<TabView
+				style={{ zIndex: 3, elevation: 5 }}
 				onIndexChange={(index) => setIndex(index)}
 				navigationState={{ index: tabIndex, routes }}
 				renderScene={renderScene}
