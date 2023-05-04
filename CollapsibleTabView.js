@@ -322,12 +322,13 @@ const CollapsibleTabView = ({ navigation }) => {
 							}
 						]}>
 						<>
-							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 5, padding: 10 }}>
+							<View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 5, paddingHorizontal: 10 }}>
 								<TouchableWithoutFeedback
 									onPress={() => {
 										navigation.push('SearchScreen', { sharedElementIds: [SEARCH_ELEMENT_ID, CANCEL_ELEMENT_ID] });
 									}}>
-									<View style={{ flex: 1 }}>
+									<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+										<Ionicons name="md-search-sharp" size={20} color="#aaa" style={{ paddingLeft: 5 }}></Ionicons>
 										<Text style={{ color: '#aaa', paddingLeft: 5, justifyContent: 'center', alignItems: 'center' }}>Search</Text>
 									</View>
 								</TouchableWithoutFeedback>
