@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
 	return (
-		<NavigationContainer contentStyle={{ backgroundColor: 'red' }}>
+		<NavigationContainer>
 			<Stack.Navigator
 				screenOptions={{
 					contentStyle: {

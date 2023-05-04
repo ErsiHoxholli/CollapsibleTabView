@@ -304,13 +304,19 @@ const CollapsibleTabView = ({ navigation }) => {
 			extrapolate: 'clamp'
 		});
 
+		const zIndex = scrollY.interpolate({
+			inputRange: [0, SearchHeight],
+			outputRange: [SearchHeight, 0],
+			extrapolate: 'clamp'
+		});
+
 		return (
 			<Animated.View
 				style={[
 					styles.header,
 					{
 						top: SEARCH_TOPAnimated,
-						zIndex: 999
+						zIndex: zIndex
 					}
 				]}>
 				<SharedElement id={SEARCH_ELEMENT_ID} style={{ flex: 1 }}>
@@ -478,40 +484,38 @@ const CollapsibleTabView = ({ navigation }) => {
 			extrapolate: 'clamp'
 		});
 		return (
-			<TouchableNativeFeedback>
-				<Animated.View
-					style={[
-						{
-							top: TABS_TOPAnimated,
-							position: 'absolute',
-							transform: [{ translateY: y }],
-							zIndex: 4,
-							elevation: 5,
-							height: TabBarHeight,
-							width: '45%',
-							marginLeft: 20
+			<Animated.View
+				style={[
+					{
+						top: TABS_TOPAnimated,
+						//position: 'absolute',
+						transform: [{ translateY: y }],
+						zIndex: 2,
+						elevation: 6,
+						height: TabBarHeight,
+						width: "55%",
+						paddingHorizontal: 20
+					}
+				]}>
+				<TabBar
+					{...props}
+					onTabPress={({ route, preventDefault }) => {
+						if (isListGliding.current) {
+							preventDefault();
 						}
-					]}>
-					<TabBar
-						{...props}
-						onTabPress={({ route, preventDefault }) => {
-							if (isListGliding.current) {
-								preventDefault();
-							}
-						}}
-						style={[styles.tab]}
-						renderLabel={renderLabel}
-						indicatorStyle={styles.indicator}
-					/>
-				</Animated.View>
-			</TouchableNativeFeedback>
+					}}
+					style={[styles.tab]}
+					renderLabel={renderLabel}
+					indicatorStyle={styles.indicator}
+				/>
+			</Animated.View>
 		);
 	};
 
 	const renderTabView = () => {
 		return (
 			<TabView
-				style={{ zIndex: 3, elevation: 5 }}
+				style={{ zIndex: 6, elevation: 5 }}
 				onIndexChange={(index) => setIndex(index)}
 				navigationState={{ index: tabIndex, routes }}
 				renderScene={renderScene}
@@ -519,7 +523,7 @@ const CollapsibleTabView = ({ navigation }) => {
 				renderAfter={BCKTabs}
 				initialLayout={{
 					height: 0,
-					width: Dimensions.get('window').width
+					//width: Dimensions.get('window').width
 				}}
 			/>
 		);
@@ -551,7 +555,7 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	label: { fontSize: 16, color: '#222' },
-	tab: { elevation: 0, shadowOpacity: 0, backgroundColor: 'transparent', height: TabBarHeight },
+	tab: { elevation: 0, shadowOpacity: 0, backgroundColor: 'transparent', height: TabBarHeight, width: 'auto' },
 	indicator: { backgroundColor: '#222' }
 });
 
