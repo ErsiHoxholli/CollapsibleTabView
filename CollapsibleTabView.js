@@ -36,7 +36,7 @@ const TabScene = ({ onGetRef, onScroll }) => {
 			contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
 			decelerationRate="normal"
 			// contentInset={topY}
-			//snapToOffsets={[0, SearchHeight]}
+			snapToOffsets={[0, SearchHeight]}
 			snapToEnd={false}
 			scrollEventThrottle={16}
 			ref={onGetRef}
@@ -56,9 +56,7 @@ const TabScene = ({ onGetRef, onScroll }) => {
 					}
 				);
 				onScroll(e);
-			}}
-			// contentContainerStyle={{ paddingTop: headerHeight + TabBarHeight + SearchHeight + 10 }}
-		>
+			}}>
 			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
 			<Text style={{ color: 'red' }}>aaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
@@ -288,11 +286,6 @@ const CollapsibleTabView = ({ navigation }) => {
 	};
 
 	const renderHeader = () => {
-		// const y = scrollY.interpolate({
-		// 	inputRange: [0, SearchHeight],
-		// 	outputRange: [0, -SearchHeight],
-		// 	extrapolate: 'clamp'
-		// });
 		const scaleY = scrollY.interpolate({
 			inputRange: [0, SearchHeight],
 			outputRange: [1, 0],
@@ -443,6 +436,7 @@ const CollapsibleTabView = ({ navigation }) => {
 			default:
 				return null;
 		}
+
 		return (
 			<TabScene
 				numCols={numCols}
@@ -493,7 +487,7 @@ const CollapsibleTabView = ({ navigation }) => {
 						zIndex: 2,
 						elevation: 6,
 						height: TabBarHeight,
-						width: "55%",
+						width: '55%',
 						paddingHorizontal: 20
 					}
 				]}>
@@ -523,7 +517,7 @@ const CollapsibleTabView = ({ navigation }) => {
 				renderAfter={BCKTabs}
 				initialLayout={{
 					height: 0,
-					//width: Dimensions.get('window').width
+					width: Dimensions.get('window').width
 				}}
 			/>
 		);
